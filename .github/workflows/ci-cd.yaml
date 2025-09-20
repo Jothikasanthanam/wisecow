@@ -32,8 +32,10 @@ jobs:
           version: v1.28.0
 
       - name: Deploy to Kubernetes
-        env:
-          KUBECONFIG: ${{ secrets.KUBECONFIG }}
         run: |
+          echo "${{ secrets.KUBECONFIG }}" | base64 --decode > $HOME/.kube/config
           kubectl apply -f k8s/wisecow-deployment.yaml
           kubectl apply -f k8s/wisecow-service.yaml
+        env:
+          KUBECONFIG: $HOME/.kube/config
+
