@@ -26,16 +26,3 @@ jobs:
           docker build -t cloud344/wisecow:latest .
           docker push cloud344/wisecow:latest
 
-      - name: Set up kubectl
-        uses: azure/setup-kubectl@v3
-        with:
-          version: v1.28.0
-
-      - name: Deploy to Kubernetes
-        run: |
-          mkdir -p $HOME/.kube
-          echo "${{ secrets.KUBECONFIG }}" | base64 --decode > $HOME/.kube/config
-          kubectl apply -f k8s/wisecow-deployment.yaml
-          kubectl apply -f k8s/wisecow-service.yaml
-        env:
-          KUBECONFIG: $HOME/.kube/config
